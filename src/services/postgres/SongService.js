@@ -1,5 +1,6 @@
 const { nanoid } = require("nanoid");
 const { Pool } = require("pg");
+const { mapDBToModelAllSong } = require("../../utils");
 
 class SongService {
   constructor() {
@@ -21,6 +22,33 @@ class SongService {
     }
 
     return result.rows[0].id;
+  }
+
+  async getAllSongs(title, performer) {
+    let text = "SELECT id, title, performer FROM songs";
+    const values = [];
+
+    if (title) {
+      text += " WHERE title ILIKE '%' || $1 || '%'";
+      values.push(title);
+    }
+
+    if (title && performer) {
+      text += " AND performer ILIKE '%' || $2 || '%'";
+      values.push(performer);
+    }
+
+    if (!title && performer) {
+      text += " WHERE performer ILIKE '%' || $1 || '%'";
+      values.push(performer);
+    }
+
+    const query = {
+      text,
+      values,
+    };
+    const result = await this._pool.query(query);
+    return result.rows.map(mapDBToModelAllSong);
   }
 }
 

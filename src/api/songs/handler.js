@@ -31,6 +31,18 @@ class SongHandler {
     response.code(201);
     return response;
   }
+
+  async getAllSongHandler(request) {
+    const { title = null, performer = null } = request.query;
+    const songs = await this._service.getAllSongs(title, performer);
+    return {
+      status: "success",
+      message: "Data Lagu sukses diambil",
+      data: {
+        songs,
+      },
+    };
+  }
 }
 
 module.exports = SongHandler;
