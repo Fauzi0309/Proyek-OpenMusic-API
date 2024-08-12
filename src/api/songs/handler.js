@@ -48,12 +48,31 @@ class SongHandler {
     const { id } = request.params;
     const song = await this._service.getSongById(id);
     return {
-      status: 'success',
+      status: "success",
       message: "Data detail lagu sukses diambil",
       data: {
         song,
       },
     };
+  }
+
+  async putSongByIdHandler(request, h) {
+    this._validator.validateSongPayload(request.payload);
+    const { id } = request.params;
+
+    await this._service.editSongById(id, request.payload);
+
+    const response = {
+      status: "success",
+      message: "Lagu berhasil diperbarui",
+      data: {
+        album: {
+          id,
+          ...request.payload,
+        },
+      },
+    };
+    return h.response(response).code(200);
   }
 }
 

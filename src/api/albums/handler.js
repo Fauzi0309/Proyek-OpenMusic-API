@@ -28,8 +28,8 @@ class AlbumsHandler {
     const { id } = request.params;
     const album = await this._service.getAlbumById(id);
     return {
-      status: 'success',
-      message: 'Data album sukses diambil',
+      status: "success",
+      message: "Data album sukses diambil",
       data: {
         album,
       },
@@ -44,13 +44,13 @@ class AlbumsHandler {
 
     const response = {
       status: "success",
+      message: "Album berhasil diperbarui",
       data: {
         album: {
           id,
           ...request.payload,
         },
       },
-      message: "Album berhasil diperbarui",
     };
     return h.response(response).code(200);
   }
@@ -60,8 +60,8 @@ class AlbumsHandler {
     await this._service.deleteAlbumById(id);
 
     return {
-      status: 'success',
-      message: 'Album berhasil dihapus',
+      status: "success",
+      message: "Album berhasil dihapus",
     };
   }
 }

@@ -54,16 +54,29 @@ class SongService {
 
   async getSongById(id) {
     const query = {
-      text: 'SELECT * FROM songs WHERE id = $1',
+      text: "SELECT * FROM songs WHERE id = $1",
       values: [id],
     };
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new NotFoundError('Lagu tidak ditemukan');
+      throw new NotFoundError("Lagu tidak ditemukan");
     }
 
     return result.rows.map(mapDBToModelDetailSong)[0];
+  }
+
+  async editSongById(id, { title, year, genre, performer, duration, albumId }) {
+    const query = {
+      text: 'UPDATE songs SET title = $1, year = $2, genre = $3, performer = $4, duration = $5, "albumId" = $6 WHERE id = $7 RETURNING id',
+      values: [title, year, genre, performer, duration, albumId, id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError("Gagal memperbarui lagu. Id tidak ditemukan");
+    }
   }
 }
 
