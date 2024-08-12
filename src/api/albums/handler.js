@@ -24,6 +24,18 @@ class AlbumsHandler {
     return response;
   }
 
+  async getAlbumIdHandler(request) {
+    const { id } = request.params;
+    const album = await this._service.getAlbumById(id);
+    return {
+      status: 'success',
+      message: 'Data album sukses diambil',
+      data: {
+        album,
+      },
+    };
+  }
+
   async putAlbumByIdHandler(request, h) {
     this._validator.validateAlbumPayload(request.payload);
     const { id } = request.params;
