@@ -54,6 +54,16 @@ class AlbumsHandler {
     };
     return h.response(response).code(200);
   }
+
+  async deleteAlbumByIdHandler(request) {
+    const { id } = request.params;
+    await this._service.deleteAlbumById(id);
+
+    return {
+      status: 'success',
+      message: 'Album berhasil dihapus',
+    };
+  }
 }
 
 module.exports = AlbumsHandler;
