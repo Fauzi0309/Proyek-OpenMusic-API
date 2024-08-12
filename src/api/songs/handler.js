@@ -43,6 +43,18 @@ class SongHandler {
       },
     };
   }
+
+  async getSongByIdHandler(request) {
+    const { id } = request.params;
+    const song = await this._service.getSongById(id);
+    return {
+      status: 'success',
+      message: "Data detail lagu sukses diambil",
+      data: {
+        song,
+      },
+    };
+  }
 }
 
 module.exports = SongHandler;
