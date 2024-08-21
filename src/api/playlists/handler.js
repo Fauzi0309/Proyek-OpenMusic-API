@@ -24,6 +24,19 @@ class PlaylistsHandler {
     response.code(201);
     return response;
   }
+
+  async getPlaylistsHandler(request, h) {
+    const { id: credentialId } = request.auth.credentials;
+    const playlists = await this._playlistsService.getPlaylists(credentialId);
+    const response = h.response({
+      status: "success",
+      data: {
+        playlists,
+      },
+    });
+    response.code(200);
+    return response;
+  }
 }
 
 module.exports = PlaylistsHandler;

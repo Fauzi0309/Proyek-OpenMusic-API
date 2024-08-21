@@ -24,6 +24,22 @@ class PlaylistService {
 
     return result.rows[0].id;
   }
+
+  async getPlaylists(owner) {
+    const query = {
+      text: `SELECT playlists.id, playlists.name, users.username FROM playlists
+      LEFT JOIN users ON users.id = playlists.owner
+      WHERE playlists.owner = $1
+      GROUP BY playlists.id, playlists.name, users.username
+      ORDER BY playlists.id`,
+      values: [owner],
+    };
+
+    const result = await this._pool.query(query);
+
+    return result.rows;
+  }
+
 }
 
 module.exports = PlaylistService;
