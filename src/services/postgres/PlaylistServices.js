@@ -88,12 +88,9 @@ class PlaylistService {
       throw new NotFoundError("Playlist tidak ditemukan");
     }
 
-    const playlist = result.rows[0];
     const allResult = {
-      id: playlist.id,
-      name: playlist.name,
-      username: playlist.username,
-      songs: resultSongs.rows,
+      ...result.rows[0],
+      songs: [...resultSongs.rows],
     };
 
     return allResult;
