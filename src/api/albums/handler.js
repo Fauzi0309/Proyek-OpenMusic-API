@@ -3,6 +3,7 @@ class AlbumsHandler {
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
+    this._likesService = service.like;
 
     autoBind(this);
   }
@@ -62,6 +63,69 @@ class AlbumsHandler {
     return {
       status: "success",
       message: "Album berhasil dihapus",
+    };
+  }
+
+  async postLikeHandler(request, h) {
+    const { id: credentialId } = request.auth.credentials;
+    const { id: albumId } = request.params;
+
+    await this._service.verifyAlbumExists(albumId);
+    await this._likesService.verifyLike(
+      credentialId,
+      albumId,
+    );
+
+    await this._likesService.addLike(credentialId, albumId);
+
+    const response = h.response({
+      status: 'success',
+      message: 'Like berhasil ditambahkan',
+    });
+
+    response.code(201);
+    return response;
+  }
+
+  async getUserAlbumLikesHandler(request, h) {
+    const { id: albumId } = request.params;
+
+    await this._service.verifyAlbumExists(albumId);
+
+    const data = await this._likesService.getLikesByAlbumId(
+      albumId,
+    );
+
+    const { likes, cache } = data;
+
+    const response = h.response({
+      status: 'success',
+      data: {
+        likes: Number(likes),
+      },
+    });
+
+    if (cache) {
+      response.header('X-Data-Source', 'cache');
+    }
+
+    return response;
+  }
+
+  async deleteUserAlbumLikeHandler(request) {
+    const { id: credentialId } = request.auth.credentials;
+    const { id: albumId } = request.params;
+
+    await this._service.verifyAlbumExists(albumId);
+
+    await this._likesService.deleteLikeByAlbumIdAndUserId(
+      albumId,
+      credentialId,
+    );
+
+    return {
+      status: 'success',
+      message: 'Like berhasil dihapus',
     };
   }
 }

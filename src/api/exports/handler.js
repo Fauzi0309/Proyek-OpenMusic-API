@@ -1,10 +1,13 @@
+const autoBind = require("auto-bind");
+
 class ExportsHandler {
-  constructor(service, validator) {
-    this._exportService = service.exportService;
-    this._playlistsService = service.playlist;
+  constructor(exportService, validator, playlistsService) {
+    this._exportService = exportService;
+    this._playlistsService = playlistsService;
     this._validator = validator;
 
-    this.postExportPlaylistHandler = this.postExportPlaylistHandler.bind(this);
+    // this.postExportPlaylistHandler = this.postExportPlaylistHandler.bind(this);
+    autoBind(this);
   }
 
   async postExportPlaylistHandler(request, h) {

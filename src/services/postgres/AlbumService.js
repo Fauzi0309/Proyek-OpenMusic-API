@@ -64,14 +64,41 @@ class AlbumService {
 
   async deleteAlbumById(id) {
     const query = {
-      text: 'DELETE FROM albums WHERE id = $1 RETURNING id',
+      text: "DELETE FROM albums WHERE id = $1 RETURNING id",
       values: [id],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Album gagal dihapus. Id tidak ditemukan');
+      throw new NotFoundError("Album gagal dihapus. Id tidak ditemukan");
+    }
+  }
+
+  async editCoverAlbumById(id, coverUrl) {
+    const updateAt = new Date().toISOString();
+    const query = {
+      text: "UPDATE albums SET cover=$2, updated_at=$3 WHERE id=$1 RETURNING id",
+      values: [id, coverUrl, updateAt],
+    };
+    console.log(query);
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError("Update Failed. Id Not Found");
+    }
+  }
+
+  async verifyAlbumExists(id) {
+    const query = {
+      text: "SELECT id FROM albums WHERE id = $1",
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError("Album tidak ditemukan");
     }
   }
 }
