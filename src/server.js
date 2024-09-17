@@ -4,13 +4,12 @@ const Hapi = require("@hapi/hapi");
 const Jwt = require("@hapi/jwt");
 const ClientError = require("./exceptions/ClientError");
 const path = require("path");
-const Inert = require('@hapi/inert');
+const Inert = require("@hapi/inert");
 
 const albums = require("./api/albums");
 const AlbumService = require("./services/postgres/AlbumService");
 const AlbumsValidator = require("./validator/albums");
-const LikesService = require('./services/postgres/LikeService');
-
+const LikesService = require("./services/postgres/LikeService");
 
 const SongService = require("./services/postgres/SongService");
 const songs = require("./api/songs");
@@ -41,7 +40,7 @@ const uploads = require("./api/uploads");
 const StorageService = require("./services/storage/StorageService");
 const UploadsValidator = require("./validator/uploads");
 
-const CacheService = require('./services/redis/CacheService');
+const CacheService = require("./services/redis/CacheService");
 
 const init = async () => {
   const cacheService = new CacheService();
@@ -151,10 +150,8 @@ const init = async () => {
     {
       plugin: uploads,
       options: {
-        service: {
-          storage: storageService,
-          album: albumService,
-        },
+        storageService: storageService,
+        albumsService: albumService,
         validator: UploadsValidator,
       },
     },

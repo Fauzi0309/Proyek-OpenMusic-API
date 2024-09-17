@@ -1,4 +1,4 @@
-const mapDBToModelAlbumDetail = ({ id, name, year, songs = [] }) => ({
+const mapDBToModelAlbumDetail = ({ id, name, year, cover, songs = [] }) => ({
   id,
   name,
   year,
@@ -7,6 +7,7 @@ const mapDBToModelAlbumDetail = ({ id, name, year, songs = [] }) => ({
     title: song.title,
     performer: song.performer,
   })),
+  coverUrl: cover
 });
 
 const mapDBToModelAllSong = ({ id, title, performer }) => ({

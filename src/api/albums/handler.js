@@ -1,12 +1,12 @@
 const autoBind = require("auto-bind");
 class AlbumsHandler {
-  constructor(service, validator) {
+  constructor(service, validator, like) {
     this._service = service;
     this._validator = validator;
-    this._likesService = service.like;
+    this._likesService = like;
 
     autoBind(this);
-  }
+}
 
   async postAlbumHandler(request, h) {
     this._validator.validateAlbumPayload(request.payload);
