@@ -145,6 +145,7 @@ const init = async () => {
       options: {
         service: ProducerService,
         validator: ExportsValidator,
+        playlistService: playlistsService,
       },
     },
     {
